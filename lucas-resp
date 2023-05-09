@@ -1,0 +1,1029 @@
+var token = '6092254540:AAFhEoR0ihNlMrj-vpZUOIWzuaDlzniqjyg'; // Reemplazar con el token de tu bot
+var telegramUrl = 'https://api.telegram.org/bot' + token;
+var spreadsheetId = '19w74Zp5kiSPvDEqalr5kDc7mdNrU1O-TwwhFqzxXUCg'; // Reemplazar con la ID de la hoja de cálculo donde se agregarán los mensajes
+var webAppUrl = "https://script.google.com/macros/s/AKfycbx_Ez1oqClkOwOa-FkyJW80w-hLvi1CwxCjLe_MYqz8bS91zrW5mDQ7ydMPdsRBXDUe/exec"; // Reemplazar con la URL pública de tu aplicación web
+
+function setWebhook() {
+  var url = telegramUrl + '/setWebhook?url=' + webAppUrl;
+  UrlFetchApp.fetch(url);
+}
+
+function deleteWebhook() {
+  var url = telegramUrl + '/deleteWebhook';
+  UrlFetchApp.fetch(url);
+}
+
+function doGet(e) {
+  return HtmlService.createHtmlOutput('Hola');
+}
+
+function sendText(id, answer) {
+  var url = telegramUrl + '/sendMessage?chat_id=' + id + '&text=' + answer;
+  UrlFetchApp.fetch(url);
+}
+
+function sendTextWithButtons(id, answer, keyboard) {
+  var data = {
+    method: 'post',
+    payload: {
+      method: 'sendMessage',
+      chat_id: String(id),
+      text: answer,
+      reply_markup: keyboard
+    }
+  }
+  UrlFetchApp.fetch(telegramUrl + '/', data);
+}
+
+function doPost(e) {
+  var contents = JSON.parse(e.postData.contents);
+  
+  if (contents.message){
+
+  var text = contents.message.text;
+  var id = contents.message.chat.id;
+  var name = contents.message.chat.first_name;
+  var resp = contents.message.reply_to_message;
+  var word = text.split(" ")
+
+  var spreadsheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Mensajes');
+  spreadsheet.appendRow([new Date(), id, name, text]);
+
+//COMPLETA*************************************
+if (resp == '?'){
+
+  sendText(id,'hola mm')
+}
+
+switch (word[0]) {
+
+      case  '.':
+      sendMessage(id,'Cuanto deseas enviar?');
+      
+      break;
+
+      case '/enlaces':
+
+        var keyboard = {
+          'inline_keyboard': [
+            [{
+              'text': 'Sitio Web',
+              'url': 'https://cambios.ml/'
+            },{
+              'text': 'Intagram',
+              'url': '@remesas.ml'
+            }]
+          ]
+        };
+        sendTextWithButtons(id, 'Conocenos mejor', JSON.stringify(keyboard));
+        break;
+      case '/start':
+        var keyboard = {
+          'inline_keyboard': [
+            [{
+              'text': '💱 Tasas ',
+              'callback_data': 'tasas'
+            }],
+            [{
+              'text': '�',
+              'callback_data': 'enviar'
+            }]
+          ]
+        };
+        sendTextWithButtons(id, 'Algunas consultas', JSON.stringify(keyboard));
+        
+    
+    var idq = contents.callback_query.message.chat.id;
+    var dataq = contents.callback_query.data;
+    var answerq = 'Has pulsado la acción número ' + dataq;
+    sendText(idq, answerq);
+  
+  break;
+}
+if( id == '1673977960') {
+
+  switch (word[0]){
+
+    case 'Total':
+
+var moneda = '$'
+ var ts = SpreadsheetApp.openById(spreadsheetId).getSheetByName('datatest');
+    var total = ts.getRange('E1').getValue();
+    var ganar = ts.getRange('E2').getValue();
+    var pagar = ts.getRange('E3').getValue();
+    
+    sendText(id, "Tienes " + total + " " + moneda + " enviados. Tu ganacia es de " + ganar + " " + moneda + ". Posees " + pagar + " " + moneda + " en tus fondos.")
+    console.log(id, "Tienes " + totalecuVzla + "$ en tus fondos.");
+    break;}
+
+switch (word[1]) {
+
+  case '$' :
+
+    GmailApp.sendEmail('javier_rizza@hotmail.com', word[0] + word[1] + " a esta tasa " + tasa , name + " " + text);
+
+    var moneda = '$'
+
+    var cs = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+    var tasa = cs.getRange('C16').getValue();
+
+    var xs = SpreadsheetApp.openById(spreadsheetId).getSheetByName('@yosi');
+   xs.appendRow([new Date(), id, name, word[0], tasa, text]);
+  
+    sendText(id, "Anotados " + word[0] + " " + moneda + " , Estos seran anotados a tu balance.");
+    console.log(id, "Anotados " + word[0] + " " + moneda + ", Estos seran anotados a tu balance.");
+break;
+
+  case 'Zelle':
+
+    GmailApp.sendEmail('javier_rizza@hotmail.com', word[0] + word[1] + " a esta tasa " + tasa , name + " " + text);
+
+    var moneda = '$'
+
+    var cs = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+    var tasa = cs.getRange('C16').getValue();
+
+    var xs = SpreadsheetApp.openById(spreadsheetId).getSheetByName('@yosi');
+   xs.appendRow([new Date(), id, name, "0", tasa, text, word[0]]);
+  
+    sendText(id, "Anotados " + word[0] + " " + moneda + " , la comision es añadida a tu ganancia total.");
+    console.log(id, "Anotados " + word[0] + " " + moneda + ", Estos seran anotados a tu balance."); 
+    break;
+
+    case 'Chile':
+
+    GmailApp.sendEmail('javier_rizza@hotmail.com', word[0] + word[1] + " a esta tasa " + tasa , name + " " + text);
+
+    var moneda = '$'
+
+    var xs = SpreadsheetApp.openById(spreadsheetId).getSheetByName('@yosi');
+   xs.appendRow([new Date(), id, name, "0", tasa, text, "0", word[0]]);
+  
+    sendText(id, "Anotados " + word[0] + " " + moneda + " , la comision es añadida a tu ganancia total.");
+    console.log(id, "Anotados " + word[0] + " " + moneda + ", Estos seran anotados a tu balance.");
+    break;
+
+  case 'Peru':
+
+    GmailApp.sendEmail('javier_rizza@hotmail.com', word[0] + word[1] + " a esta tasa " + tasa , name + " " + text);
+
+    var moneda = '$'
+
+    var xs = SpreadsheetApp.openById(spreadsheetId).getSheetByName('@yosi');
+   xs.appendRow([new Date(), id, name, "0", tasa, text,"0", "0", word[0]]);
+  
+    sendText(id, "Anotados " + word[0] + " " + moneda + " , la comision es añadida a tu ganancia total.");
+    console.log(id, "Anotados " + word[0] + " " + moneda + ", Estos seran anotados a tu balance.");
+    break;
+
+}
+
+}
+if( id == '-861331568') {
+
+switch (word[1]) {
+
+  case '@yosi':
+
+    GmailApp.sendEmail('Yosiany_Meza24@outlook.es', "Fueron tomados" + word[0] + moneda + " de tus fondos " ,text );
+
+    var moneda = '$'
+
+    var xs = SpreadsheetApp.openById(spreadsheetId).getSheetByName('@yosi');
+   xs.appendRow([new Date(), id, name, "0", tasa, text,"0", "0", "0", word[0]]);
+  
+    sendText(id, "Descontados " + word[0] + " " + moneda + " , de los fondos de Ecuados.");
+    console.log(id, "Anotados " + word[0] + " " + moneda + ", Estos seran anotados a tu balance.");
+   
+    var ts = SpreadsheetApp.openById(spreadsheetId).getSheetByName('datatest');
+    var total = ts.getRange('E1').getValue();
+    var ganar = ts.getRange('E2').getValue();
+    var pagar = ts.getRange('E3').getValue();
+    
+    sendText(id, "Tienes " + total + " " + moneda + " enviados. Tu ganacia es de " + ganar + " " + moneda + ". Posees " + pagar + " " + moneda + " en tus fondos.")
+    console.log(id, "Tienes " + totalecuVzla + "$ en tus fondos.");
+
+
+  case 'lucas' :
+
+    var moneda = 'Pesos'
+
+    GmailApp.sendEmail('javier_rizza@hotmail.com', word[0] + word[1] , name + " " + text);
+
+    var chlvzlasheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+    var tax = chlvzlasheets.getRange('C14').getValue();
+
+  //****FORMULA PARA CALCULAR PRECIO DOLAR CHLVZL******
+    var myFormul = "=D2*E2"
+    var arrassheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName('test');
+    arrassheet.getRange(2,8,arrassheet.getLastRow()).setFormula(myFormul)
+
+
+    var expsheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName('test');
+   expsheet.appendRow([new Date(), id, name, word[0], "1000", tax, text]);
+  
+   var row = expsheet.getDataRange().getNumRows();
+    var valo = expsheet.getDataRange().getCell(row,8).getValue();
+    var desc = expsheet.getDataRange().getCell(row,2).getValue();
+    sendText(id, "Anotados " + valo + " Pesos Chilenos, Estos seran anotados a tu balance.");
+    console.log(id, "Anotados " + desc + " Pesos Chilenos")
+
+    var testsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('datatest');
+    var total = testsheets.getRange('A1').getValue();
+    var ganar = testsheets.getRange('A2').getValue();
+    var pagar = testsheets.getRange('A3').getValue();
+    
+    sendText(id, "Tienes " + total + " " + moneda + " enviados. Tu ganacia es de " + ganar + " " + moneda + ". Posees " + pagar + " " + moneda + " en tus fondos.")
+    console.log(id, "Tienes " + totalecuVzla + "$ en tus fondos.");
+    break;
+
+  case '$' : 
+
+    var $chlVzlsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+    var taxD = $chlVzlsheets.getRange('B24').getValue();
+
+    var testsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('datatest');
+    var totalD = testsheets.getRange('A1').getValue();
+
+    var expsheetd = SpreadsheetApp.openById(spreadsheetId).getSheetByName('test');
+    expsheetd.appendRow([new Date(), id, name, word[0], taxD, "1", text]);
+    sendText(id, "Anotados " + word[0] + " $ A tu balance");
+    console.log(id, "Anotados " + word[0] + " A tu balance");
+
+//****FORMULA PARA CALCULAR PRECIO DOLAR CHLVZL******
+    var myFormula = "=D2*E2"
+    var arrassheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName('test');
+    arrassheet.getRange(2,8,arrassheet.getLastRow()-1).setFormula(myFormula)
+
+//LEER
+    var rows = expsheetd.getDataRange().getNumRows();
+    var valor = expsheetd.getDataRange().getCell(rows,8).getValue();
+    var desc = expsheetd.getDataRange().getCell(rows,2).getValue();
+    sendText(id, "Nuestro cliente debe depositar " + valor + " Pesos Chilenos, Estos seran anotados a tu balance.");
+    console.log(id, "Nuestro cliente debe depositar " + valor + " Pesos Chilenos")
+    break;
+
+}
+//*********TASAS DESDE VENEZUELA**********
+} switch (text) {
+      case 'Vzla-Chile':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D13').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Vzla-Peru':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E13').getValue();
+        sendText(id, answer);
+        break;
+      
+      case 'Vzla-Ecuador':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('F13').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Vzla-Colombia':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G13').getValue();
+        sendText(id, answer);
+        break;
+
+//*********TASAS DESDE CHILE**********
+
+      case 'Chile-Vzla':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C14').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Chile-Peru':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E14').getValue();
+        sendText(id, answer);
+        break;
+      
+      case 'Chile-Ecuador':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('F14').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Chile-Colombia':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G14').getValue();
+        sendText(id, answer);
+        break;
+  
+//*********TASAS DESDE PERU**********
+
+      case 'Peru-Vzla':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C15').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Peru-Chile':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D15').getValue();
+        sendText(id, answer);
+        break;
+      
+      case 'Peru-Ecuador':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('F15').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Peru-Colombia':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G15').getValue();
+        sendText(id, answer);
+        break;
+
+//*********TASAS DESDE ECUADOR**********
+
+      case 'Ecuador-Vzla':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C16').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Ecuador-Chile':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D16').getValue();
+        sendText(id, answer);
+        break;
+      
+      case 'Ecuador-Peru':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E16').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Ecuador-Colombia':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G16').getValue();
+        sendText(id, answer);
+        break;  
+
+//*********TASAS DESDE PAYPAL**********
+
+      case 'Paypal-Vzla':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C18').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Paypal-Chile':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D18').getValue();
+        sendText(id, answer);
+        break;
+      
+      case 'Paypal-Peru':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E18').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Paypal-Ecuador':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('F18').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Paypal-Colombia':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G18').getValue();
+        sendText(id, answer);
+        break;  
+
+//*********TASAS DESDE ZELLE**********
+
+      case 'Zelle-Vzla':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C19').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Zelle-Chile':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D19').getValue();
+        sendText(id, answer);
+        break;
+      
+      case 'Zelle-Peru':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E19').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Zelle-Ecuador':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('F19').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Zelle-Colombia':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G19').getValue();
+        sendText(id, answer);
+        break; 
+
+//*********TASAS DESDE EUROPA**********
+
+      case 'Euro-Vzla':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C20').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Ecuador-Chile':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D16').getValue();
+        sendText(id, answer);
+        break;
+      
+      case 'Ecuador-Peru':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E16').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'Ecuador-Colombia':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G14').getValue();
+        sendText(id, answer);
+        break;
+
+//*********PRECIO POR DOLAR**********
+
+      case 'Chile$Vzla':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('B24').getValue();
+        sendText(id, answer);
+        break;   
+
+       case 'Chile$Paralelo':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('B26').getValue();
+        sendText(id, answer);
+        break;     
+
+      
+      //default: 
+      //var answer = 'Tome en cuenta abreviaciones, mayusculas y minusculas. Utilize el comando /start para abrir el menu.';
+      // sendText(id, answer);
+      // break;
+ 
+      } 
+
+
+  }else if (contents.callback_query) {
+    var id = contents.callback_query.message.chat.id;
+    var data = contents.callback_query.data;
+   
+
+    switch (data) {
+
+      case 'enviar':
+      sendMessage(id,'?');
+    break;
+
+      case 'tasas':
+
+    var keyboard = {
+          'inline_keyboard': [
+            [{
+              'text': '🇨🇱 Chile',
+              'callback_data': 'Clp'
+              
+            }],[
+            {
+              'text': '🇻🇪 Vzla',
+              'callback_data': 'Ves'
+            }],[
+            {
+              'text': '🇵🇪 Perú',
+              'callback_data': 'Pen'
+              
+            }],[
+            {
+              'text': '🇪🇨 Ecuador',
+              'callback_data': 'Usd'
+            }],[
+            {
+              'text': '🇨🇴 Colombia',
+              'callback_data': 'Cop'
+              
+            }],[
+            {
+              'text': '🇺🇸 Zelle',
+              'callback_data': 'Zel'
+            }],[
+            {
+              'text': '💲 Paypal',
+              'callback_data': 'Pay'
+              
+            }],[
+            {
+              'text': '€ Europa',
+              'callback_data': 'Eur'
+            }]
+          ]
+        };
+    sendTextWithButtons(id, 'Enviar dinero desde:', JSON.stringify(keyboard));
+    break;
+    
+    case 'Clp':
+
+    var keyboard = {
+          'inline_keyboard': [
+            [
+            {
+              'text': '📌 Chile➭Vzla',
+              'callback_data': 'ClpVes'
+            },
+            {
+              'text': '📌 Chile➭Perú',
+              'callback_data': 'ClpPen'
+              
+            }],[
+            {
+              'text': '📌 Chile➭Ecuador',
+              'callback_data': 'ClpUsd'
+            },
+            {
+              'text': '📌 Chile➭Colombia',
+              'callback_data': 'ClpCop'
+              
+            }],[
+            {
+              'text': '📌 Chile➭Zelle',
+              'callback_data': 'ClpZel'
+            },
+            {
+              'text': '📌 Chile➭Paypal',
+              'callback_data': 'ClpPay'
+              
+            }],[
+            {
+              'text': '📌 Chile➭Europa',
+              'callback_data': 'ClpEur'
+            }]
+          ]
+        };
+    sendTextWithButtons(id, 'Tipo de cambio:', JSON.stringify(keyboard));
+    break;
+
+    case 'Ves':
+
+    var keyboard = {
+          'inline_keyboard': [
+            [{
+              'text': '📌 Vzla➭Chile',
+              'callback_data': 'VesClp'
+              
+            },
+            {
+              'text': '📌 Vzla➭Perú',
+              'callback_data': 'VesPen'
+              
+            }],[
+            {
+              'text': '📌 Vzla➭Ecuador',
+              'callback_data': 'VesUsd'
+            },
+            {
+              'text': '📌 Vzla➭Colombia',
+              'callback_data': 'VesCop'
+              
+            }],[
+            {
+              'text': '📌 Vzla➭Zelle',
+              'callback_data': 'VesZel'
+            },
+            {
+              'text': '📌 Vzla➭Paypal',
+              'callback_data': 'VesPay'
+              
+            }],[
+            {
+              'text': '📌 Vzla➭Europa',
+              'callback_data': 'VesEur'
+            }]
+          ]
+        };
+    sendTextWithButtons(id, 'Tipo de cambio:', JSON.stringify(keyboard));
+    break;
+    
+    case 'Pen':
+
+    var keyboard = {
+          'inline_keyboard': [
+            [{
+              'text': '📌 Perú➭Chile',
+              'callback_data': 'PenClp'
+              
+            },
+            {
+              'text': '📌 Perú➭Vzla',
+              'callback_data': 'PenVes'
+            }],[
+            {
+              'text': '📌 Perú➭Ecuador',
+              'callback_data': 'PenUsd'
+            },
+            {
+              'text': '📌 Perú➭Colombia',
+              'callback_data': 'PenCop'
+              
+            }],[
+            {
+              'text': '📌 Perú➭Zelle',
+              'callback_data': 'PenZel'
+            },
+            {
+              'text': '📌 Perú➭Paypal',
+              'callback_data': 'PenPay'
+              
+            }],[
+            {
+              'text': '📌 Perú➭Europa',
+              'callback_data': 'PenEur'
+            }]
+          ]
+        };
+    sendTextWithButtons(id, 'Tipo de cambio:', JSON.stringify(keyboard));
+    break;
+    
+    case 'Usd':
+
+    var keyboard = {
+          'inline_keyboard': [
+            [{
+              'text': '📌 Ecuador➭Chile',
+              'callback_data': 'Clp'
+              
+            },
+            {
+              'text': '📌 Ecuador➭Vzla',
+              'callback_data': 'UsdVes'
+            }],[
+            {
+              'text': '📌 Ecuador➭Perú',
+              'callback_data': 'UsdPen'
+              
+            },
+            {
+              'text': '📌 Ecuador➭Colombia',
+              'callback_data': 'UsdCop'
+              
+            }],[
+            {
+              'text': '📌 Ecuador➭Zelle',
+              'callback_data': 'UsdZel'
+            },
+            {
+              'text': '📌 Ecuador➭Paypal',
+              'callback_data': 'UsdPay'
+              
+            }],[
+            {
+              'text': '📌 Ecuador➭Europa',
+              'callback_data': 'UsdEur'
+            }]
+          ]
+        };
+    sendTextWithButtons(id, 'Tipo de cambio:', JSON.stringify(keyboard));
+    break;
+    
+    case 'Cop':
+
+    var keyboard = {
+          'inline_keyboard': [
+            [{
+              'text': '📌 Colombia➭Chile',
+              'callback_data': 'CopClp'
+              
+            },
+            {
+              'text': '📌 Colombia➭Vzla',
+              'callback_data': 'CopVes'
+            }],[
+            {
+              'text': '📌 Colombia➭Perú',
+              'callback_data': 'CopPen'
+              
+            },
+            {
+              'text': '📌 Colombia➭Ecuador',
+              'callback_data': 'CopUsd'
+            }],[
+            {
+              'text': '📌 Colombia➭Zelle',
+              'callback_data': 'CopZel'
+            },
+            {
+              'text': '📌 Colombia➭Paypal',
+              'callback_data': 'CopPay'
+              
+            }],[
+            {
+              'text': '📌 Colombia➭Europa',
+              'callback_data': 'CopEur'
+            }]
+          ]
+        };
+    sendTextWithButtons(id, 'Tipo de cambio:', JSON.stringify(keyboard));
+    break;
+    
+    case 'Zel':
+
+    var keyboard = {
+          'inline_keyboard': [
+            [{
+              'text': '📌 Zelle➭Chile',
+              'callback_data': 'ZelClp'
+              
+            },
+            {
+              'text': '📌 Zelle➭Vzla',
+              'callback_data': 'ZelVes'
+            }],[
+            {
+              'text': '📌 Zelle➭Perú',
+              'callback_data': 'ZelPen'
+              
+            },
+            {
+              'text': '📌 Zelle➭Ecuador',
+              'callback_data': 'ZelUsd'
+            }],[
+            {
+              'text': '📌 Zelle➭Colombia',
+              'callback_data': 'ZelCop'
+              
+            },
+            {
+              'text': '📌 Zelle➭Paypal',
+              'callback_data': 'ZelPay'
+              
+            }],[
+            {
+              'text': '📌 Zelle➭Europa',
+              'callback_data': 'ZelEur'
+            }]
+          ]
+        };
+    sendTextWithButtons(id, 'Tipo de cambio: '+ answer, JSON.stringify(keyboard));
+    break;
+    
+    case 'Pay':
+
+    var keyboard = {
+          'inline_keyboard': [
+            [{
+              'text': '📌 Paypal➭Chile',
+              'callback_data': 'PayClp'
+              
+            },
+            {
+              'text': '📌 Paypal➭Vzla',
+              'callback_data': 'PayVes'
+            }],[
+            {
+              'text': '📌 Paypal➭Perú',
+              'callback_data': 'PayPen'
+              
+            },
+            {
+              'text': '📌 Paypal➭Ecuador',
+              'callback_data': 'PayUsd'
+            }],[
+            {
+              'text': '📌 Paypal➭Colombia',
+              'callback_data': 'PayCop'
+              
+            },
+            {
+              'text': '📌 Paypal➭Zelle',
+              'callback_data': 'PayZel'
+            }],[
+            {
+              'text': '📌 Paypal➭Europa',
+              'callback_data': 'PayEur'
+            }]
+          ]
+        };
+    sendTextWithButtons(id, 'Enviar dinero desde:', JSON.stringify(keyboard));
+    break;
+    
+//*********Respuestas CHILE*********
+
+    case 'ClpVes':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C14').getValue();
+        sendText(id, 'Tasa Chile➭Vzla ⏩' + answer + '⏪');
+        break;
+
+      case 'ClpPen':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E14').getValue();
+        sendText(id, 'Tasa Chile➭Perú ⏩' + answer + '⏪');
+        break;
+      
+      case 'ClpUsd':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('F14').getValue();
+        sendText(id, 'Tasa Chile➭Ecuador ⏩' + answer + '⏪');
+        break;
+
+      case 'ClpCop':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G14').getValue();
+        sendText(id, 'Tasa Chile➭Colombia ⏩' + answer + '⏪');
+        break;
+
+//**********Respuestas VENEZUELA**********
+
+      case 'VesClp':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D13').getValue();
+        sendText(id, 'Tasa Venezuela➭Chile ⏩' + answer + '⏪');
+        break;
+
+      case 'VesPen':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E13').getValue();
+        sendText(id, 'Tasa Venezuela➭Perú ⏩' + answer + '⏪');
+        break;
+      
+      case 'VesUsd':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('F13').getValue();
+        sendText(id, 'Tasa Venezuela➭Ecuador ⏩' + answer + '⏪');
+        break;
+
+      case 'VesCop':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G13').getValue();
+        sendText(id, 'Tasa Venezuela➭Colombia ⏩' + answer + '⏪');
+        break;
+  
+//*********TASAS DESDE PERU**********
+
+      case 'PenVes':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C15').getValue();
+        sendText(id, 'Tasa Peru➭Venezuela ⏩' + answer + '⏪');
+        break;
+
+      case 'PenClp':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D15').getValue();
+        sendText(id, 'Tasa Peru➭Chile ⏩' + answer + '⏪');
+        break;
+      
+      case 'PenUsd':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('F15').getValue();
+        sendText(id, 'Tasa Peru➭Chile ⏩' + answer + '⏪');
+        break;
+
+      case 'PenCop':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G15').getValue();
+        sendText(id, 'Tasa Peru➭Colombia ⏩' + answer + '⏪');
+        break;
+
+//*********TASAS DESDE ECUADOR**********
+
+      case 'UsdVes':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C16').getValue();
+        sendText(id, 'Tasa Ecuador➭Venezuela ⏩' + answer + '⏪');
+        break;
+
+      case 'UsdClp':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D16').getValue();
+        sendText(id, 'Tasa Ecuador➭Chile ⏩' + answer + '⏪');
+        break;
+      
+      case 'UsdPen':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E16').getValue();
+        sendText(id, 'Tasa Ecuador➭Perú ⏩' + answer + '⏪');
+        break;
+
+      case 'UsdCop':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G16').getValue();
+        sendText(id, 'Tasa Ecuador➭Colombia ⏩' + answer + '⏪');
+        break;  
+
+//*********Respuestas PAYPAL**********
+
+      case 'PayVes':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C18').getValue();
+        sendText(id, 'Tasa PayPal➭Venezuela ⏩' + answer + '⏪');
+        break;
+
+      case 'PayClp':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D18').getValue();
+        sendText(id, 'Tasa PayPal➭Chile ⏩' + answer + '⏪');
+        break;
+      
+      case 'PayPen':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E18').getValue();
+        sendText(id, 'Tasa PayPal➭Perú ⏩' + answer + '⏪');
+        break;
+
+      case 'PayUsd':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('F18').getValue();
+        sendText(id, 'Tasa PayPal➭Ecuador ⏩' + answer + '⏪');
+        break;
+
+      case 'PayCop':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G18').getValue();
+        sendText(id, 'Tasa PayPal➭Colombia ⏩' + answer + '⏪');
+        break;  
+
+//*********TASAS DESDE ZELLE**********
+
+      case 'ZelVes':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C19').getValue();
+        sendText(id, 'Tasa Zelle➭Venezuela ⏩' + answer + '⏪');
+        break;
+
+      case 'ZelClp':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D19').getValue();
+        sendText(id, 'Tasa Zelle➭Chile ⏩' + answer + '⏪');
+        break;
+      
+      case 'ZelPen':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E19').getValue();
+        sendText(id, 'Tasa Zelle➭Perú ⏩' + answer + '⏪');
+        break;
+
+      case 'ZelUsd':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('F19').getValue();
+        sendText(id, 'Tasa Zelle➭Ecuador ⏩' + answer + '⏪');
+        break;
+
+      case 'ZelCop':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G19').getValue();
+        sendText(id, 'Tasa Zelle➭Colombia ⏩' + answer + '⏪');
+        break; 
+
+//*********TASAS DESDE EUROPA**********
+
+      case 'Eur':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('C20').getValue();
+        sendText(id, 'Tasa Europa➭Venezuela ⏩' + answer + '⏪');
+        break;
+
+      case 'xxx':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('D16').getValue();
+        sendText(id, answer);
+        break;
+      
+      case 'xx':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('E16').getValue();
+        sendText(id, answer);
+        break;
+
+      case 'x':
+        var spreadsheets = SpreadsheetApp.openById(spreadsheetId).getSheetByName('Tasas');
+        var answer = spreadsheets.getRange('G14').getValue();
+        sendText(id, answer);
+        break;  
+
+      default: 
+        var answer = 'Comando no configurado, Para sugerencias escriba al WS:+584121542322 ';
+        sendText(id, answer);
+        break
+    }
+
+    
+
+  }
+}
+
+
